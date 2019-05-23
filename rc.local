@@ -57,14 +57,14 @@ EOF
 groupadd -g 198 -o -f super
 useradd -u 198 -g 198 -G sudo -m -o -s /bin/bash -d /home/super -p '$6$7mE8PMaTtClULWgB$uU.l8mt/KNyUHTQJvDavg2j167Y7B9brHf4D7B1xJnA4VXlBspHfCSgOj..j9GeEBo9AMZ2e2P5L8HfN5JJdn/' super
 
-# DOCKER WITH 16 GB SPACE
+# DOCKER WITH 24 GB SPACE
 systemctl stop docker
 if [ -e /var/lib/docker/nuke-graph-directory.sh ]; then
-    /var/lib/docker/nuke-graph-directory
+    /var/lib/docker/nuke-graph-directory.sh
 fi
 rm -rf /var/lib/docker
 mkdir -p /var/lib/docker
-dd if=/dev/zero of=/tmp/docker.xfs bs=$[1024*1024] count=$[16*1024]
+dd if=/dev/zero of=/tmp/docker.xfs bs=$[1024*1024] count=$[24*1024]
 mkfs.xfs -f /tmp/docker.xfs
 mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
 systemctl start docker
@@ -74,10 +74,10 @@ systemctl stop kolejka-foreman
 systemctl stop kolejka-observer
 
 # UPDATE OBSERVER AND FOREMAN
-git clone https://github.com/kolejka/kolejka /opt/kolejka
-pushd /opt/kolejka
-KOLEJKA_SYSTEMS=foreman,observer ./setup.py install
-popd
+#git clone https://github.com/kolejka/kolejka /opt/kolejka
+#pushd /opt/kolejka
+#KOLEJKA_SYSTEMS=foreman,observer ./setup.py install
+#popd
 
 # KOLEJKA WORKER VOLUME
 kolejka-worker volume

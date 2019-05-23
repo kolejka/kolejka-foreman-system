@@ -62,4 +62,6 @@ COPY rc.local /etc/rc.local
 RUN chmod 755 /etc/rc.local
 
 RUN mkdir /etc/kolejka
+RUN chmod 0755 /etc/kolejka
 COPY kolejka.conf /etc/kolejka/kolejka.conf
+RUN chmod 0600 /etc/kolejka/kolejka.conf
