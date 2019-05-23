@@ -70,13 +70,20 @@ mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
 systemctl start docker
 
 # KOLEJKA
+systemctl stop kolejka-foreman
+systemctl stop kolejka-observer
+
+# UPDATE OBSERVER AND FOREMAN
 git clone https://github.com/kolejka/kolejka /opt/kolejka
 pushd /opt/kolejka
 KOLEJKA_SYSTEMS=foreman,observer ./setup.py install
 popd
 
+# KOLEJKA WORKER VOLUME
+kolejka-worker volume
+
 # KOLEJKA OBSERVER DAEMON
-systemctl restart kolejka-observer
+systemctl start kolejka-observer
 
 # KOLEJKA FOREMAN DAEMON
-systemctl restart kolejka-foreman
+systemctl start kolejka-foreman
