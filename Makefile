@@ -7,12 +7,10 @@ clean :
 
 .PHONY: build
 build :
-	docker build --no-cache --tag kolejka.matinf.uj.edu.pl/kolejka:foreman .
-	docker push kolejka.matinf.uj.edu.pl/kolejka:foreman
+	docker build --no-cache --tag kolejka:foreman .
 
 kolejka-foreman.squashfs :
-	docker pull kolejka.matinf.uj.edu.pl/kolejka:foreman
-	./docker_squash kolejka.matinf.uj.edu.pl/kolejka:foreman kolejka-foreman.squashfs
+	./docker_squash kolejka:foreman kolejka-foreman.squashfs
 
 kolejka-foreman.vmlinuz : kolejka-foreman.squashfs
 	./squash_extract_vmlinuz kolejka-foreman.squashfs kolejka-foreman.vmlinuz kolejka-foreman.initrd
