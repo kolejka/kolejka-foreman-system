@@ -16,7 +16,7 @@ kolejka-foreman.vmlinuz : kolejka-foreman.squashfs
 	./squash_extract_vmlinuz kolejka-foreman.squashfs kolejka-foreman.vmlinuz kolejka-foreman.initrd
 
 .PHONY: deploy
-deploy :
+deploy : kolejka-foreman.squashfs kolejka-foreman.vmlinuz
 	cp -a kolejka-foreman.squashfs /srv/nfs/kolejka/foreman/casper/filesystem.squashfs
 	cp -a kolejka-foreman.vmlinuz /srv/tftp/configs/kolejka/foreman/vmlinuz
 	cp -a kolejka-foreman.initrd /srv/tftp/configs/kolejka/foreman/initrd
