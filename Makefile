@@ -8,7 +8,7 @@ clean :
 .PHONY: build
 build : clean kolejka-foreman.build
 
-kolejka-foreman.build :
+kolejka-foreman.build : Dockerfile kolejka.conf rc.local
 	docker build --no-cache --tag kolejka:foreman .
 	touch kolejka-foreman.build
 
