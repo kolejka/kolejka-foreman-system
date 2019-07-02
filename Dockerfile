@@ -70,7 +70,7 @@ RUN systemctl disable \
 
 RUN sed -e "s|enabled=1|enabled=0|" -i /etc/default/apport
 
-RUN apt-get autoremove
+RUN apt-get -y autoremove
 
 COPY rc.local /etc/rc.local
 RUN chmod 755 /etc/rc.local
