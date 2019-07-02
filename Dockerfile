@@ -58,6 +58,20 @@ RUN apt-get -f -y install \
         vlan \
         xfsprogs
 
+RUN apt-get -f -y remove \
+        snapd \
+        unattended-upgrades
+
+RUN systemctl disable \
+        apt-daily-upgrade.timer \
+        apt-daily.timer \
+        atd \
+        cron
+
+RUN sed -e "s|enabled=1|enabled=0|" -i /etc/default/apport
+
+RUN apt-get autoremove
+
 COPY rc.local /etc/rc.local
 RUN chmod 755 /etc/rc.local
 
