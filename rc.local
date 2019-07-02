@@ -53,6 +53,12 @@ FTP_PROXY="${FTP_PROXY}"
 NO_PROXY="${NO_PROXY}"
 EOF
 
+#NTP
+cat > /etc/systemd/timesyncd.conf <<EOF
+[Time]
+NTP=149.156.75.219
+EOF
+
 # SUPER USER
 groupadd -g 198 -o -f super
 useradd -u 198 -g 198 -G sudo -m -o -s /bin/bash -d /home/super -p '$6$7mE8PMaTtClULWgB$uU.l8mt/KNyUHTQJvDavg2j167Y7B9brHf4D7B1xJnA4VXlBspHfCSgOj..j9GeEBo9AMZ2e2P5L8HfN5JJdn/' super
