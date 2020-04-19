@@ -40,7 +40,7 @@ RUN apt-get -f -y install \
 RUN apt-get -f -y install \
         btrfs-tools \
         casper \
-        docker-ce \
+        docker-ce=5:19.03.6~3-0~ubuntu-bionic \
         ethtool \
         git \
         iptables \
