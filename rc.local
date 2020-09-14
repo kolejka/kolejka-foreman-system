@@ -98,7 +98,15 @@ systemctl stop kolejka-observer
 #popd
 
 # KOLEJKA WORKER VOLUME
-kolejka-worker volume
+while true; do
+    if kolejka-worker volume; then
+        if docker run --volume kolejka_python:/kolejka_python:rw -it alpine:latest ls /kolejka_python/python3; then
+            break;
+        fi
+    fi
+    echo "Failed to prepare Python3 volume for kolejka"
+    sleep 30
+done
 
 # KOLEJKA OBSERVER DAEMON
 systemctl start kolejka-observer
