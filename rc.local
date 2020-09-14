@@ -100,7 +100,7 @@ systemctl stop kolejka-observer
 # KOLEJKA WORKER VOLUME
 while true; do
     if kolejka-worker volume; then
-        if docker run --volume kolejka_python:/kolejka_python:rw -it alpine:latest ls /kolejka_python/python3; then
+        if docker run --volume kolejka_python:/kolejka_python:ro alpine:latest ls /kolejka_python/python3; then
             break;
         fi
     fi
