@@ -39,7 +39,7 @@ RUN apt-get -f -y install \
 
 RUN apt-get -f -y install \
         casper \
-        docker-ce \ 
+        docker-ce=5:19.03.14~3-0~ubuntu-focal \ 
         #docker.io \
         ethtool \
         git \
