@@ -25,8 +25,17 @@ RUN apt-get -f -y install \
 
 RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" >> /etc/apt/sources.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EA0A9C3F273FCD8
+
 RUN echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu focal main" >> /etc/apt/sources.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key EE527D561340007D
+
+RUN echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list && \
+    echo "deb http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list && \
+    echo "deb http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
+    echo "deb http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
+    echo "deb http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-key F60F4B3D7FA2AF80 C45B1676A04EA552
+
 RUN apt-get update && \
     apt-get -y dist-upgrade
 RUN apt-get -f -y install \
@@ -37,9 +46,16 @@ RUN apt-get -f -y install \
         linux-image-generic \
         linux-tools-generic
 
+RUN apt-get -f -y install --no-install-recommends \
+        nvidia-driver-460 && \
+    apt-get -f -y install \
+        cuda-cudart-11.2 \
+        cuda-command-line-tools-11.2 \
+        nvidia-docker2
+
 RUN apt-get -f -y install \
         casper \
-        docker-ce=5:19.03.14~3-0~ubuntu-focal \ 
+        docker-ce \ 
         #docker.io \
         ethtool \
         git \
