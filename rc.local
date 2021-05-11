@@ -92,6 +92,7 @@ cat > /etc/docker/daemon.json <<EOF
   "registry-mirrors": ["https://registry.tcs.uj.edu.pl"]
 }
 EOF
+systemctl stop docker #in case it gets restarted?
 systemctl start docker
 
 # KOLEJKA
