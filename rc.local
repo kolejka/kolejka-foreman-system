@@ -22,7 +22,7 @@ sed -e "s|__HOSTNAME__|${HOSTNAME}|" -i /etc/kolejka/kolejka.conf
 # AUTHORIZED KEYS
 mkdir -p /root/.ssh
 chmod 755 /root/.ssh
-cat > /root/.ssh/authorized_keys <<EOF
+cat >> /root/.ssh/authorized_keys <<EOF
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHV7/8MTk8OoNWdXK5Hw7NYMPBoK8XnZVmDnLP7wexBVqqJFenFW75bqqHtgXDmXYVVf7Q9XfVafXM5S1We3YfKbAGYowllBaX3vga8wkvIJj816Yldhv/0Vmy9DXLnzcKAaA90a0LFxZWfsVg6VqMUgDK0ra/CS+ofRzwf07VHKUEr8g== root@random
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBABE+YFv8KCBjXETHXgd27+2wi2X7x/g5ydmCq36TLPXQVEJZpheBJbfoRZpjiKGmkAp85AuX4QGTOq/mNEhZGI+fAHcLe60D8B4xpXWG/01mdhQa1X2NgDnLMzgduD9vuGWLufbP6M0zC4p27lIT4UceHF/6IYf37WuEbq4MhoB8DnJ0A== root@kolejka
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAASuz6dlbQx3L9EVSlyvuq11Lad+vfmUPdY763rSigFBHPocEvVN17M5+ZhxVbBXpp1InQuMFaMkRBn+0VA1jtbeQCeqf3johQctncu+uXCjAmj/Nxv3Q67VIKPvufx5gDpFE/WFpDusc3/aFs0Op6AqjLyHDAGVkM3HK17IXDxIrMhKA== kolejka@matinf.uj.edu.pl
@@ -47,6 +47,8 @@ chmod 400 /etc/ssh/ssh_host_ecdsa_key
 chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
 sed -e "s|^\( *HostKey .*\)$|\#\1|" -i /etc/ssh/sshd_config
 echo "HostKey /etc/ssh/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config
+sed -e "s|^\( *PermitRootLogin .*\)$|\#\1|" -i /etc/ssh/sshd_config
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 service ssh restart
 
 # SSH SETTINGS FOR GIT
@@ -85,6 +87,11 @@ mkdir -p /var/lib/docker
 dd if=/dev/zero of=/tmp/docker.xfs bs=$[1024*1024] count=$[24*1024]
 mkfs.xfs -f /tmp/docker.xfs
 mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
+cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": ["https://registry.tcs.uj.edu.pl"]
+}
+EOF
 systemctl start docker
 
 # KOLEJKA
@@ -105,7 +112,7 @@ while true; do
         fi
     fi
     echo "Failed to prepare Python3 volume for kolejka"
-    sleep 30
+    sleep 600
 done
 
 # KOLEJKA OBSERVER DAEMON
