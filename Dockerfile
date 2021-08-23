@@ -47,10 +47,10 @@ RUN apt-get -f -y install \
         linux-tools-generic
 
 RUN apt-get -f -y install --no-install-recommends \
-        nvidia-driver-460 && \
+        nvidia-driver-470 && \
     apt-get -f -y install \
-        cuda-cudart-11.2 \
-        cuda-command-line-tools-11.2 \
+        cuda-cudart-11.4 \
+        cuda-command-line-tools-11.4 \
         nvidia-docker2
 
 RUN apt-get -f -y install \
