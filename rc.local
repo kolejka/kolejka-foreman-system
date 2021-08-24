@@ -86,13 +86,16 @@ rm -rf /var/lib/docker
 mkdir -p /var/lib/docker
 dd if=/dev/zero of=/tmp/docker.xfs bs=$[1024*1024] count=$[24*1024]
 mkfs.xfs -f /tmp/docker.xfs
-mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
-cat > /etc/docker/daemon.json <<EOF
-{
-  "registry-mirrors": ["https://registry.tcs.uj.edu.pl"]
-}
-EOF
 systemctl stop docker #in case it gets restarted?
+mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
+python3 <<EOF
+import json
+with open('/etc/docker/daemon.json') as conf_file:
+  conf = json.load(conf_file)
+conf['registry-mirrors'] = [ 'https://registry.tcs.uj.edu.pl' ]
+with open('/etc/docker/daemon.json','w') as conf_file:
+  json.dump(conf, conf_file)
+EOF
 systemctl start docker
 
 # KOLEJKA
