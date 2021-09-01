@@ -39,6 +39,8 @@ RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
 
 RUN apt-get -y dist-upgrade
 
+RUN echo "options nvidia \"NVreg_RestrictProfilingToAdminUsers=0\"" > /etc/modprobe.d/nvidia.conf
+
 RUN apt-get -f -y install \
         linux-headers-generic \
         linux-image-generic \
