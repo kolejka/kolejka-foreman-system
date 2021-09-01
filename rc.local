@@ -78,7 +78,7 @@ groupadd -g 198 -o -f super
 useradd -u 198 -g 198 -G sudo -m -o -s /bin/bash -d /home/super -p '$6$7mE8PMaTtClULWgB$uU.l8mt/KNyUHTQJvDavg2j167Y7B9brHf4D7B1xJnA4VXlBspHfCSgOj..j9GeEBo9AMZ2e2P5L8HfN5JJdn/' super
 
 # DOCKER WITH 24 GB SPACE
-systemctl stop docker
+systemctl stop docker.socket docker.service
 if [ -e /var/lib/docker/nuke-graph-directory.sh ]; then
     /var/lib/docker/nuke-graph-directory.sh
 fi
@@ -86,7 +86,6 @@ rm -rf /var/lib/docker
 mkdir -p /var/lib/docker
 dd if=/dev/zero of=/tmp/docker.xfs bs=$[1024*1024] count=$[24*1024]
 mkfs.xfs -f /tmp/docker.xfs
-systemctl stop docker #in case it gets restarted?
 mount -o loop,uquota,pquota /tmp/docker.xfs /var/lib/docker
 python3 <<EOF
 import json
@@ -96,7 +95,7 @@ conf['registry-mirrors'] = [ 'https://registry.tcs.uj.edu.pl' ]
 with open('/etc/docker/daemon.json','w') as conf_file:
   json.dump(conf, conf_file)
 EOF
-systemctl start docker
+systemctl start docker.socket docker.service
 
 # KOLEJKA
 systemctl stop kolejka-foreman
