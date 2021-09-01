@@ -25,21 +25,23 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restric
     update-locale LANG=en_US.UTF-8 && \
     true
 
-RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" >> /etc/apt/sources.list && \
+RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EA0A9C3F273FCD8 && \
-    echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu focal main" >> /etc/apt/sources.list && \
+    echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu focal main" > /etc/apt/sources.list.d/kolejka.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key EE527D561340007D && \
-    echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list && \
-    echo "deb http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list && \
-    echo "deb http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
-    echo "deb http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
-    echo "deb http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list && \
+    echo "deb [by-hash=no] http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb [by-hash=no] http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key F60F4B3D7FA2AF80 C45B1676A04EA552 && \
     apt-get update
 
 RUN apt-get -y dist-upgrade
 
-RUN echo "options nvidia \"NVreg_RestrictProfilingToAdminUsers=0\"" > /etc/modprobe.d/nvidia.conf
+RUN mkdir -p /etc/modprobe.d && \
+    echo "options nvidia \"NVreg_RestrictProfilingToAdminUsers=0\"" > /etc/modprobe.d/nvidia.conf && \
+    true
 
 RUN apt-get -f -y install \
         linux-headers-generic \
