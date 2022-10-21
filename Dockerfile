@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 MAINTAINER KOLEJKA <kolejka@matinf.uj.edu.pl>
 ENTRYPOINT ["/bin/bash"]
 WORKDIR /root
@@ -10,10 +10,10 @@ ENV DEBIAN_PRIORITY critical
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN rm -f /etc/apt/sources.list.d/*
-RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restricted universe multiverse" >  /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ focal-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://security.ubuntu.com/ubuntu focal-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
+RUN echo "deb     http://archive.ubuntu.com/ubuntu/ jammy           main restricted universe multiverse" >  /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ jammy-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://security.ubuntu.com/ubuntu jammy-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -f -y install \
         apt-transport-https \
@@ -25,16 +25,15 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restric
     update-locale LANG=en_US.UTF-8 && \
     true
 
-RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list && \
+RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EA0A9C3F273FCD8 && \
-    echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu focal main" > /etc/apt/sources.list.d/kolejka.list && \
+    echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu jammy main" > /etc/apt/sources.list.d/kolejka.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key EE527D561340007D && \
-    echo "deb [by-hash=no] http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia.list && \
-    echo "deb [by-hash=no] http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    echo "deb              http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key F60F4B3D7FA2AF80 C45B1676A04EA552 && \
+    echo "deb              http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64 /" > /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/libnvidia-container/ubuntu22.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu22.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu22.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-key A4B469963BF863CC DDCAE044F796ECB0 && \
     apt-get update
 
 RUN apt-get -y dist-upgrade
@@ -53,11 +52,11 @@ RUN apt-get -f -y install \
     true
 
 RUN apt-get -f -y install --no-install-recommends \
-        nvidia-driver-470 \
+        nvidia-driver-515 \
     && \
     apt-get -f -y install \
-        cuda-cudart-11-4 \
-        cuda-command-line-tools-11-4 \
+        cuda-cudart-11-8 \
+        cuda-command-line-tools-11-8 \
         nvidia-docker2 \
     && \
     true
@@ -70,7 +69,7 @@ RUN apt-get -f -y install \
         iptables \
         python3-kolejkaforeman \
         lshw \
-        lupin-casper \
+        #lupin-casper \
         lvm2 \
         mdadm \
         nfs-client \
