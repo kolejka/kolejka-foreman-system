@@ -18,6 +18,7 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restric
     apt-get -f -y install \
         apt-transport-https \
         apt-utils \
+        curl \
         locales \
         software-properties-common \
     && \
@@ -25,15 +26,20 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restric
     update-locale LANG=en_US.UTF-8 && \
     true
 
-RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EA0A9C3F273FCD8 && \
-    echo "deb http://ppa.launchpad.net/kolejka/kolejka/ubuntu focal main" > /etc/apt/sources.list.d/kolejka.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key EE527D561340007D && \
-    echo "deb              http://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia.list && \
+RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https://download.docker.com/linux/ubuntu/gpg" && \
+    cat /tmp/docker.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/docker.gpg && \
+    rm -f /tmp/docker.gpg && \
+    echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list && \
+    curl --location --silent --output /tmp/cuda.deb "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb" && \
+    dpkg -i /tmp/cuda.deb && \
+    rm -f /tmp/cuda.deb && \
+    apt-add-repository --no-update ppa:kolejka/kolejka && \
+    curl --silent --show-error --fail --location --output /tmp/nvidia.gpg "https://nvidia.github.io/nvidia-docker/gpgkey" && \
+    cat /tmp/nvidia.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/nvidia.gpg && \
+    rm -f /tmp/nvidia.gpg && \
     echo "deb              http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key A4B469963BF863CC DDCAE044F796ECB0 && \
     apt-get update
 
 RUN apt-get -y dist-upgrade
@@ -57,7 +63,7 @@ RUN apt-get -f -y install --no-install-recommends \
     apt-get -f -y install \
         cuda-cudart-11-8 \
         cuda-command-line-tools-11-8 \
-        nvidia-docker2 \
+        nvidia-container-toolkit \
     && \
     true
 
