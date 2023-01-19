@@ -23,30 +23,30 @@ sed -e "s|__HOSTNAME__|${HOSTNAME}|" -i /etc/kolejka/kolejka.conf
 mkdir -p /root/.ssh
 chmod 755 /root/.ssh
 cat >> /root/.ssh/authorized_keys <<EOF
-ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHV7/8MTk8OoNWdXK5Hw7NYMPBoK8XnZVmDnLP7wexBVqqJFenFW75bqqHtgXDmXYVVf7Q9XfVafXM5S1We3YfKbAGYowllBaX3vga8wkvIJj816Yldhv/0Vmy9DXLnzcKAaA90a0LFxZWfsVg6VqMUgDK0ra/CS+ofRzwf07VHKUEr8g== root@random
-ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBABE+YFv8KCBjXETHXgd27+2wi2X7x/g5ydmCq36TLPXQVEJZpheBJbfoRZpjiKGmkAp85AuX4QGTOq/mNEhZGI+fAHcLe60D8B4xpXWG/01mdhQa1X2NgDnLMzgduD9vuGWLufbP6M0zC4p27lIT4UceHF/6IYf37WuEbq4MhoB8DnJ0A== root@kolejka
-ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAASuz6dlbQx3L9EVSlyvuq11Lad+vfmUPdY763rSigFBHPocEvVN17M5+ZhxVbBXpp1InQuMFaMkRBn+0VA1jtbeQCeqf3johQctncu+uXCjAmj/Nxv3Q67VIKPvufx5gDpFE/WFpDusc3/aFs0Op6AqjLyHDAGVkM3HK17IXDxIrMhKA== kolejka@matinf.uj.edu.pl
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOWFMyYNh1VNU5kmyb4enJqQQKHzRQnhOi5yO8Vy5QIr root@random
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILnP1Dp/AzIy1poIksRLvexynyJwOk4XKlMMxlcy8lFx root@kolejka
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILCDyen0FYhsVuO6RiK+C2xgT7HnWpr06Qho17JqmJuj kolejka-server@kolejka
 EOF
 chmod 644 /root/.ssh/authorized_keys
 
 # SSH HOST KEY
 mkdir /etc/ssh
-cat > /etc/ssh/ssh_host_ecdsa_key <<EOF
------BEGIN EC PRIVATE KEY-----
-MIHcAgEBBEIAExG5CV2HVHZCBlilqQXFLf5Xr9BKemh/qffULlhMGQ4eyKENFHMt
-mQBuj3KzXHHAWRLyJVpH4YV2n01AJp0eJzWgBwYFK4EEACOhgYkDgYYABAAjMGeQ
-uShftn/qflWOeTrysOoxCvnSEU1TqlP0BIzHswn9MKHjvUgk+ek7YTiHRqbFzQCn
-u0NQbaxQbXn8SLWOBAHmgiutX/KokmFVTsKC4pdtFsk4hAFRoguO0UeAPoXzvoQm
-3Aw9ON4EefCVn9s2gdmGfpr4grnEs045IWQjekgprQ==
------END EC PRIVATE KEY-----
+cat > /etc/ssh/ssh_host_ed25519_key <<EOF
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACAea+FOjGpG2nV2BonxU64zfkqZS2Yw/jWfZtsLie8JOAAAAJgsqMlPLKjJ
+TwAAAAtzc2gtZWQyNTUxOQAAACAea+FOjGpG2nV2BonxU64zfkqZS2Yw/jWfZtsLie8JOA
+AAAEDQQJLtGMJDL11l+VtR34jD7kxDKxRrAs/1/4VKnB8ach5r4U6MakbadXYGifFTrjN+
+SplLZjD+NZ9m2wuJ7wk4AAAAEXJvb3RAMjI5YjVkOTU0NmIxAQIDBA==
+-----END OPENSSH PRIVATE KEY-----
 EOF
-cat > /etc/ssh/ssh_host_ecdsa_key.pub <<EOF
-ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAAjMGeQuShftn/qflWOeTrysOoxCvnSEU1TqlP0BIzHswn9MKHjvUgk+ek7YTiHRqbFzQCnu0NQbaxQbXn8SLWOBAHmgiutX/KokmFVTsKC4pdtFsk4hAFRoguO0UeAPoXzvoQm3Aw9ON4EefCVn9s2gdmGfpr4grnEs045IWQjekgprQ== kolejka_foreman
+cat > /etc/ssh/ssh_host_ed25519_key.pub <<EOF
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5r4U6MakbadXYGifFTrjN+SplLZjD+NZ9m2wuJ7wk4 kolejka_foreman
 EOF
-chmod 400 /etc/ssh/ssh_host_ecdsa_key
-chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
+chmod 400 /etc/ssh/ssh_host_ed25519_key
+chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
 sed -e "s|^\( *HostKey .*\)$|\#\1|" -i /etc/ssh/sshd_config
-echo "HostKey /etc/ssh/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config
+echo "HostKey /etc/ssh/ssh_host_ed25519_key" >> /etc/ssh/sshd_config
 sed -e "s|^\( *PermitRootLogin .*\)$|\#\1|" -i /etc/ssh/sshd_config
 echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 service ssh restart
