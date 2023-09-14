@@ -43,9 +43,9 @@ RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https
     apt-get -y dist-upgrade
 
 RUN apt-get -f -y install \
-        linux-headers-generic-hwe-20.04 \
-        linux-image-generic-hwe-20.04 \
-        linux-tools-generic-hwe-20.04 \
+        linux-headers-generic \
+        linux-image-generic \
+        linux-tools-generic \
         ubuntu-minimal \
         ubuntu-server \
     && \
@@ -74,11 +74,11 @@ RUN apt-get -f -y install \
     true
 
 RUN apt-get -f -y install --no-install-recommends \
-        nvidia-driver-525 \
+        nvidia-driver-535 \
     && \
     apt-get -f -y install \
-        cuda-cudart-12-0 \
-        cuda-command-line-tools-12-0 \
+        cuda-cudart-12-2 \
+        cuda-command-line-tools-12-2 \
         nvidia-container-toolkit \
     && \
     true
