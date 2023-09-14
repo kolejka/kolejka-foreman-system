@@ -35,7 +35,6 @@ RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https
     curl --silent --show-error --fail --location --output /tmp/nvidia.gpg "https://nvidia.github.io/nvidia-docker/gpgkey" && \
     cat /tmp/nvidia.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/nvidia.gpg && \
     rm -f /tmp/nvidia.gpg && \
-    echo "deb              http://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     apt-add-repository --no-update ppa:kolejka/kolejka && \
