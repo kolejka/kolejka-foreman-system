@@ -1,5 +1,12 @@
-FROM ubuntu:noble
-MAINTAINER KOLEJKA <kolejka@matinf.uj.edu.pl>
+ARG UBUNTU_NAME=noble
+FROM ubuntu:${UBUNTU_NAME}
+ARG UBUNTU_NAME
+ARG UBUNTU_RELEASE=24.04
+ARG UBUNTU_RELEASE_SIMPLE=2404
+ARG NVIDIA_DRIVER_VERSION=550
+ARG CUDA_VERSION=12-6
+ARG KERNEL_VERSION=generic-hwe-24.04
+LABEL org.opencontainers.authors="KOLEJKA <kolejka@matinf.uj.edu.pl>"
 ENTRYPOINT ["/bin/bash"]
 WORKDIR /root
 
@@ -10,10 +17,10 @@ ENV DEBIAN_PRIORITY critical
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN rm -f /etc/apt/sources.list.d/*
-RUN echo "deb     http://archive.ubuntu.com/ubuntu/ noble           main restricted universe multiverse" >  /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ noble-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ noble-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://security.ubuntu.com/ubuntu noble-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
+RUN echo "deb     http://archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}           main restricted universe multiverse" >  /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://security.ubuntu.com/ubuntu ${UBUNTU_NAME}-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -f -y install \
         apt-transport-https \
@@ -23,7 +30,8 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ noble           main restric
         software-properties-common \
     && \
     locale-gen en_US.UTF-8 && \
-    update-locale LANG=en_US.UTF-8
+    update-locale LANG=en_US.UTF-8 && \
+    true
 
 RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https://download.docker.com/linux/ubuntu/gpg" && \
     cat /tmp/docker.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/docker.gpg && \
@@ -35,15 +43,15 @@ RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https
     curl --silent --show-error --fail --location --output /tmp/nvidia.gpg "https://nvidia.github.io/nvidia-docker/gpgkey" && \
     cat /tmp/nvidia.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/nvidia.gpg && \
     rm -f /tmp/nvidia.gpg && \
-    echo "deb              http://nvidia.github.io/libnvidia-container/stable/deb/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb [arch=amd64] http://nvidia.github.io/libnvidia-container/stable/deb/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     apt-add-repository --no-update ppa:kolejka/kolejka && \
     apt-get update && \
     apt-get -y dist-upgrade
 
 RUN apt-get -f -y install \
-        linux-headers-generic-hwe-24.04 \
-        linux-image-generic-hwe-24.04 \
-        linux-tools-generic-hwe-24.04 \
+        linux-headers-${KERNEL_VERSION} \
+        linux-image-${KERNEL_VERSION} \
+        linux-tools-${KERNEL_VERSION} \
         ubuntu-minimal \
         ubuntu-server \
     && \
@@ -72,11 +80,11 @@ RUN apt-get -f -y install \
     true
 
 RUN apt-get -f -y install --no-install-recommends \
-        nvidia-driver-550 \
+        nvidia-driver-${NVIDIA_DRIVER_VERSION} \
     && \
     apt-get -f -y install \
-        cuda-cudart-12-6 \
-        cuda-command-line-tools-12-6 \
+        cuda-cudart-${CUDA_VERSION} \
+        cuda-command-line-tools-${CUDA_VERSION} \
         nvidia-container-toolkit \
     && \
     true
