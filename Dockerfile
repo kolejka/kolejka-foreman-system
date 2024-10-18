@@ -42,9 +42,9 @@ RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https
     apt-get -y dist-upgrade
 
 RUN apt-get -f -y install \
-        linux-headers-generic \
-        linux-image-generic \
-        linux-tools-generic \
+        linux-headers-generic-hwe-20.04 \
+        linux-image-generic-hwe-20.04 \
+        linux-tools-generic-hwe-20.04 \
         ubuntu-minimal \
         ubuntu-server \
     && \
