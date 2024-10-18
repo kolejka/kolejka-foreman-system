@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 MAINTAINER KOLEJKA <kolejka@matinf.uj.edu.pl>
 ENTRYPOINT ["/bin/bash"]
 WORKDIR /root
@@ -10,10 +10,10 @@ ENV DEBIAN_PRIORITY critical
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN rm -f /etc/apt/sources.list.d/*
-RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restricted universe multiverse" >  /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ focal-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb     http://security.ubuntu.com/ubuntu focal-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
+RUN echo "deb     http://archive.ubuntu.com/ubuntu/ noble           main restricted universe multiverse" >  /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ noble-updates   main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://archive.ubuntu.com/ubuntu/ noble-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb     http://security.ubuntu.com/ubuntu noble-security  main restricted universe multiverse" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -f -y install \
         apt-transport-https \
@@ -28,23 +28,22 @@ RUN echo "deb     http://archive.ubuntu.com/ubuntu/ focal           main restric
 RUN curl --silent --show-error --fail --location --output /tmp/docker.gpg "https://download.docker.com/linux/ubuntu/gpg" && \
     cat /tmp/docker.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/docker.gpg && \
     rm -f /tmp/docker.gpg && \
-    echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list && \
-    curl --silent --show-error --fail --location --output /tmp/cuda.deb "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb" && \
+    echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu noble stable" > /etc/apt/sources.list.d/docker.list && \
+    curl --silent --show-error --fail --location --output /tmp/cuda.deb "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb" && \
     dpkg -i /tmp/cuda.deb && \
     rm -f /tmp/cuda.deb && \
     curl --silent --show-error --fail --location --output /tmp/nvidia.gpg "https://nvidia.github.io/nvidia-docker/gpgkey" && \
     cat /tmp/nvidia.gpg |gpg --dearmor > /etc/apt/trusted.gpg.d/nvidia.gpg && \
     rm -f /tmp/nvidia.gpg && \
-    echo "deb              http://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
-    echo "deb              http://nvidia.github.io/nvidia-docker/ubuntu20.04/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
+    echo "deb              http://nvidia.github.io/libnvidia-container/stable/deb/amd64 /" >> /etc/apt/sources.list.d/nvidia.list && \
     apt-add-repository --no-update ppa:kolejka/kolejka && \
     apt-get update && \
     apt-get -y dist-upgrade
 
 RUN apt-get -f -y install \
-        linux-headers-generic-hwe-20.04 \
-        linux-image-generic-hwe-20.04 \
-        linux-tools-generic-hwe-20.04 \
+        linux-headers-generic-hwe-24.04 \
+        linux-image-generic-hwe-24.04 \
+        linux-tools-generic-hwe-24.04 \
         ubuntu-minimal \
         ubuntu-server \
     && \
@@ -73,11 +72,11 @@ RUN apt-get -f -y install \
     true
 
 RUN apt-get -f -y install --no-install-recommends \
-        nvidia-driver-535 \
+        nvidia-driver-550 \
     && \
     apt-get -f -y install \
-        cuda-cudart-12-2 \
-        cuda-command-line-tools-12-2 \
+        cuda-cudart-12-6 \
+        cuda-command-line-tools-12-6 \
         nvidia-container-toolkit \
     && \
     true
@@ -91,8 +90,6 @@ RUN apt-get -f -y remove \
 RUN systemctl disable \
         apt-daily-upgrade.timer \
         apt-daily.timer \
-        atd \
-        cron \
     && \
     true
 

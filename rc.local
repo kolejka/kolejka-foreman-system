@@ -14,10 +14,11 @@ EOF
 
 #HOSTNAME
 systemctl restart systemd-networkd
-dhclient
-HOSTNAME="$(cat /var/lib/dhcp/dhclient.leases |grep "option host-name" |cut -d '"' -f 2)"
-hostnamectl set-hostname --static "${HOSTNAME}"
-sed -e "s|__HOSTNAME__|${HOSTNAME}|" -i /etc/kolejka/kolejka.conf
+HOSTNAME="$(cat /run/net-*.conf |grep 'HOSTNAME=' |cut -d = -f 2 |tr -d -c '[A-Za-z0-9-]')"
+if [ "${HOSTNAME}" != "" ]; then
+    hostnamectl set-hostname --static "${HOSTNAME}"
+    sed -e "s|__HOSTNAME__|${HOSTNAME}|" -i /etc/kolejka/kolejka.conf
+fi
 
 # AUTHORIZED KEYS
 mkdir -p /root/.ssh
