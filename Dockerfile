@@ -10,11 +10,11 @@ LABEL org.opencontainers.authors="KOLEJKA <kolejka@matinf.uj.edu.pl>"
 ENTRYPOINT ["/bin/bash"]
 WORKDIR /root
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-ENV DEBIAN_PRIORITY critical
-ENV DEBIAN_FRONTEND noninteractive
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV DEBIAN_PRIORITY=critical
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN rm -f /etc/apt/sources.list.d/*
 RUN echo "deb     http://archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}           main restricted universe multiverse" >  /etc/apt/sources.list && \
@@ -59,15 +59,24 @@ RUN apt-get -f -y install \
 
 RUN apt-get -f -y install \
         casper \
+        cmake \
         docker-ce \ 
         ethtool \
+        g++ \
+        gcc \
         git \
         iptables \
         python3-kolejkaforeman \
         lshw \
         lvm2 \
+        make \
         mdadm \
         nfs-client \
+        p7zip-full \
+        p7zip-rar \
+        pkg-config \
+        python3 \
+        python3-dev \
         python3-venv \
         rsync \
         screen \

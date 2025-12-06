@@ -5,6 +5,10 @@ all : clean kolejka-foreman.build kolejka-foreman.squashfs kolejka-foreman.vmlin
 clean :
 	rm -rf kolejka-foreman.squashfs kolejka-foreman.vmlinuz kolejka-foreman.initrd
 
+.PHONY: debug
+debug :
+	docker build --tag kolejka:foreman .
+
 .PHONY: build
 build : clean kolejka-foreman.build
 
