@@ -3,6 +3,7 @@ FROM ubuntu:${UBUNTU_NAME}
 ARG UBUNTU_NAME
 ARG UBUNTU_RELEASE=24.04
 ARG UBUNTU_RELEASE_SIMPLE=2404
+ARG DOCKER_VERSION="=5:28.5.2-1~ubuntu.24.04~noble"
 ARG NVIDIA_DRIVER_VERSION=580
 ARG CUDA_VERSION=12-9
 ARG KERNEL_VERSION=generic
@@ -60,7 +61,8 @@ RUN apt-get -f -y install \
 RUN apt-get -f -y install \
         casper \
         cmake \
-        docker-ce \ 
+        docker-ce${DOCKER_VERSION} \
+        docker-ce-cli${DOCKER_VERSION} \
         ethtool \
         g++ \
         gcc \
